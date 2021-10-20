@@ -2,6 +2,7 @@ ARCHIVO_SALIDA = 'salida.txt'
 EOF = ''
 fichero = open (ARCHIVO_SALIDA)
 token = '' #declaramos como variable global
+linea = 1
 
 def match(token_esperado) :
     if (token == token_esperado) : # aqui se compara con el token actual
@@ -17,6 +18,7 @@ def match(token_esperado) :
 def get_token():
 
     global token #aqui le decimos que queremos utilizar la variable global creada
+    global linea
     token = ''
     caracter =''
     while (True) :
@@ -28,8 +30,12 @@ def get_token():
                 if (caracter != '\t'):
                     break
         elif (caracter == '' or caracter == '\n' or caracter == ' ') :
+            if (caracter == '\n'):
+                linea += 1
             break
-    print (token)
+
+    if (token not in ['','\n',' ','\t']) :
+        print (token)
 
 def json() :
 
@@ -43,29 +49,33 @@ def element () :
     elif (token == 'L_CORCHETE'):
         array ()
     else:
-        raise Exception ('ha ocurrido un error')
+        raise Exception ('ha ocurrido un error en la linea ' + str(linea))
 
 def object ():
     try:
+        global token
+
         match ('L_LLAVE')
-        if (token == 'R_LLAVE'):
+        if (token == 'R_LLAVE') :
             match ('R_LLAVE')
         else :
             atribute_list()
             match ('R_LLAVE')
     except :
-        print ("ha ocurrido un error en object()")
+        print ("ha ocurrido un error en object() en la linea  "+ str(linea))
 
 def array ():
     try:
-        match ('L_CORCHETE')
-        if (token == 'R_CORCHETE'):
-            match ('R_CORCHETE')
-        else :
-            element_list()
-            match ('R_CORCHETE')
+            global token
+            match ('L_CORCHETE')
+            if (token == 'R_CORCHETE') :
+                print ("es una lista vacia")
+                match ('R_CORCHETE')
+            else :
+                element_list()
+                match ('R_CORCHETE')
     except:
-        print ("ha ocurrido un error en array ()")
+        print ("ha ocurrido un error en array () en la linea "+ str(linea))
 
 
 def element_list() :
@@ -73,7 +83,8 @@ def element_list() :
         element()
         A_prima()
     except:
-        print ("ha ocurrido un error en element_list()")
+        print ("hola")
+        print ("ha ocurrido un error en element_list() en la linea "+ str(linea))
 
 def A_prima():
 
@@ -83,16 +94,17 @@ def A_prima():
             element()
             A_prima()
         else :
+            print ("lista vacia")
             return #se cumple con el caso base
     except:
-        print ("ha ocurrido un error en A_prima()")
+        print ("ha ocurrido un error en A_prima() en la linea "+ str(linea))
 
 def atribute_list() :
     try :
         atribute()
         B_prima()
     except:
-        print ("ha ocurrido un error en atribute_list()")
+        print ("ha ocurrido un error en atribute_list() en la linea "+ str(linea))
 
 def atribute ():
 
@@ -110,14 +122,14 @@ def B_prima():
         else :
             return # se cumple con el caso base
     except :
-        print ("ha ocurrido un error en B_prima()")
+        print ("ha ocurrido un error en B_prima() en la linea "+ str(linea))
 
 def atribute_name ():
 
     try :
         match ('STRING')
     except:
-        print ("ha ocurrido un error en atribute_name()")
+        print ("ha ocurrido un error en atribute_name() en la linea "+ str(linea))
 
 def atribute_value():
 
@@ -141,3 +153,4 @@ if (__name__ == '__main__') :
     get_token() #tomamos el primer token del archivo
     json()
     fichero.close()
+
