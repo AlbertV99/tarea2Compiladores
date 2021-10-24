@@ -12,6 +12,7 @@ def main():
 
 
 def procesar_fichero(fichero,tabla):
+    retorno=""
     caracter = '1'
     variable = ''
     token = ''
@@ -23,7 +24,7 @@ def procesar_fichero(fichero,tabla):
         try:
 
             if (caracter == '\n') :
-                escribir_linea(linea + '\n')
+                retorno+=linea #+ '\n'
                 linea = '' + ("\t"*tabs) # linea nueva
                 nro_linea += 1
                 caracter = fichero.readline(1)
@@ -40,7 +41,7 @@ def procesar_fichero(fichero,tabla):
                 if(token.numero==p.LITERAL_CADENA):
                     procesar_cadena(fichero)
                 elif(token.numero==p.LITERAL_NUM):
-                    procesar_numerico(fichero)
+                    token.nombre_token=procesar_numerico(fichero)
                 elif(token.numero==p.L_CORCHETE or token.numero == p.L_LLAVE):
                     tabs+=1
                 elif(token.numero==p.R_CORCHETE or token.numero == p.R_LLAVE):
@@ -48,12 +49,15 @@ def procesar_fichero(fichero,tabla):
 
             linea += token.nombre_token + ' '
             caracter = fichero.readline(1)
+
             # token = None
         except Exception as error:
             # linea += token.nombre_token + ' '
-            escribir_linea(linea + '\n')
-            print(error)
-            exit(-1)
+            retorno+=linea + '\n'
+            # print(str(error)+">"+str(nro_linea)+"<")
+            raise Exception(str(str(error)+">"+str(nro_linea)+"<"))
+            # exit(-1)
+    return retorno
 
 def procesar_cadena(fichero):
     while (True):
@@ -68,7 +72,8 @@ def procesar_numerico(fichero):
     while (True):
         caracter = fichero.readline(1)
         if ((caracter == '' or caracter == '\n' or caracter == ',') and (True)) : #agregar condicion para que siempre encuentre numeros, si encuentra algo extraño, devolver error
-            return 'NUMBER'
+            temp='NUMBER' +(' COMA' if (caracter ==',') else '')
+            return temp
             break
     pass
 
@@ -101,5 +106,5 @@ def inicializar_archivo_salida():
     salida.close()
 
 # NOTE: Agregar excepcion para cuando se llega al final de la linea, y una cadena no se cierra
-
-main()
+if (__name__ == '__main__') :
+    main()

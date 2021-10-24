@@ -1,8 +1,31 @@
+import tabla_simbolos as t
+import tarea_compiladores as lexer
+ARCHIVO_ENTRADA = 'prueba.txt'
 ARCHIVO_SALIDA = 'salida.txt'
 EOF = ''
-fichero = open (ARCHIVO_SALIDA)
 token = '' #declaramos como variable global
 linea = 1
+cadena = ''
+posicion = 0
+lista_errores = []
+def main():
+    tabla = t.TablaSimbolos()
+
+    with open(ARCHIVO_ENTRADA) as fichero:
+        try:
+            cadena = lexer.procesar_fichero(fichero,tabla)
+            print(cadena +"\n longitud = "+ str(len(cadena)))
+            analizador_sintactico(cadena)
+        except Exception as e:
+            print(e)
+    fichero.close()
+
+
+def analizador_sintactico(dato):
+    global cadena
+    cadena = dato
+    get_token()
+    json()
 
 def match(token_esperado) :
     if (token == token_esperado) : # aqui se compara con el token actual
@@ -13,25 +36,22 @@ def match(token_esperado) :
     else :
         raise Exception ('ha ocurrido un error se esperaba ----> ' + token_esperado)
 
-
 #aqui se actualiza el valor del token por el siguiente que viene en el fichero
 def get_token():
 
     global token #aqui le decimos que queremos utilizar la variable global creada
     global linea
+    global cadena
+    global posicion
     token = ''
     caracter =''
-    while (True) :
-        token += caracter
-        caracter = fichero.readline(1)
-        if (caracter == '\t') :
-            while (True) :
-                caracter = fichero.readline(1)
-                if (caracter != '\t'):
-                    break
-        elif (caracter == '' or caracter == '\n' or caracter == ' ') :
-            if (caracter == '\n'):
-                linea += 1
+    while (True and posicion <len(cadena)) :
+        if(caracter!='\t'):
+            token += caracter
+
+        caracter = cadena[posicion]
+        posicion+=1
+        if (caracter == '' or caracter == '\n' or caracter == ' ') :
             break
 
     if (token not in ['','\n',' ','\t']) :
@@ -41,11 +61,10 @@ def json() :
 
     element ()
 
-
 def element () :
 
     if (token == 'L_LLAVE') :
-        object ()
+        object()
     elif (token == 'L_CORCHETE'):
         array ()
     else:
@@ -61,15 +80,15 @@ def object ():
         else :
             atribute_list()
             match ('R_LLAVE')
-    except :
-        print ("ha ocurrido un error en object() en la linea  "+ str(linea))
+    except Exception as error:
+        print ("ha ocurrido un error en object() en la linea  "+ str(posicion)+ str(error))
 
 def array ():
     try:
             global token
             match ('L_CORCHETE')
             if (token == 'R_CORCHETE') :
-                print ("es una lista vacia")
+                # print ("es una lista vacia")
                 match ('R_CORCHETE')
             else :
                 element_list()
@@ -77,13 +96,11 @@ def array ():
     except:
         print ("ha ocurrido un error en array () en la linea "+ str(linea))
 
-
 def element_list() :
     try:
         element()
         A_prima()
     except:
-        print ("hola")
         print ("ha ocurrido un error en element_list() en la linea "+ str(linea))
 
 def A_prima():
@@ -150,7 +167,7 @@ def atribute_value():
 
 
 if (__name__ == '__main__') :
-    get_token() #tomamos el primer token del archivo
-    json()
-    fichero.close()
-
+    # get_token() #tomamos el primer token del archivo
+    # json()
+    # fichero.close()
+    main()
