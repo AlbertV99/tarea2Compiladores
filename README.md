@@ -7,39 +7,39 @@ de fuentes correctos). En caso de error se deberá implementar la estrategia de 
 errores Panic Mode con sincronización y continuar el análisis.
 
 ## Analisis
-Json -> element eof
-element -> object | array
-array -> [element-list] | []
-element-list -> element A'
-A' -> element A' | e
-object -> {atribute-list} | {}
-atribute-list -> atribute B'
-B' -> atribute B' | e
-atribute -> atribute-name : atribute-value
-atribute-name -> string
-atribute-value -> element | string | number | true | false | null
+- Json -> element eof
+- element -> object | array
+- array -> [element-list] | []
+- element-list -> element A'
+- A' -> element A' | e
+- object -> {atribute-list} | {}
+- atribute-list -> atribute B'
+- B' -> atribute B' | e
+- atribute -> atribute-name : atribute-value
+- atribute-name -> string
+- atribute-value -> element | string | number | true | false | null
 
 ### Primero
-json = {P(element)} = {{;[}
-element = {P(object);P(array)}={{;[}
-array = {[}
-element-list = {P(element)} = {{;[}
-A' = {,;e}
-object = {{}
-atribute-list = {P(atribute)}={string}}
-B' = {,;e}
-atribute = {P(atribute-name)}={string}
-atribute-value{P(element);string;number;true;false;null}
+- json = {P(element)} = {{;[}
+- element = {P(object);P(array)}={{;[}
+- array = {[}
+- element-list = {P(element)} = {{;[}
+- A' = {,;e}
+- object = {{}
+- atribute-list = {P(atribute)}={string}}
+- B' = {,;e}
+- atribute = {P(atribute-name)}={string}
+- atribute-value{P(element);string;number;true;false;null}
 
-###Siguiente
-S(json)={$} ->{$}
-element = {$;,;];}} -> {$;,;];}}
-array = {$;,;];}} -> {$;,;];}}
-element-list {]} -> {]}
-A' = {]} -> {]}
-object = {$;,;];}
-atribute-list = {}}->{}}
-B'={}} -> {}}
-atribute = {,;}} -> {,;}}
-atribute-name = {:} ->{:}
-atribute-value = {,;}}->{,;}}
+### Siguiente
+- S(json)={$} ->{$}
+- element = {$;,;];}} -> {$;,;];}}
+- array = {$;,;];}} -> {$;,;];}}
+- element-list {]} -> {]}
+- A' = {]} -> {]}
+- object = {$;,;];}
+- atribute-list = {}}->{}}
+- B'={}} -> {}}
+- atribute = {,;}} -> {,;}}
+- atribute-name = {:} ->{:}
+- atribute-value = {,;}}->{,;}}
