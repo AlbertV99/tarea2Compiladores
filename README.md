@@ -43,3 +43,11 @@ errores Panic Mode con sincronización y continuar el análisis.
 - atribute = {,;}} -> {,;}}
 - atribute-name = {:} ->{:}
 - atribute-value = {,;}}->{,;}}
+
+
+
+#### Integrantes 
+- Victor Garcete (4.365.710)
+- Alberto Valdez (5.031.168)
+
+
