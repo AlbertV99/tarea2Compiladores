@@ -1,12 +1,12 @@
 # tarea2Compiladores
-##Descripcion
+## Descripcion
 Implementar un analizador sintáctico descendente recursivo o LL(1) para el lenguaje Json
 simplificado.  Recibe un archivo fuente Json, y debe imprimir en pantalla si el fuente es
 sintácticamente correcto o los errores encontrados en caso de existir (se adjuntan ejemplos
 de fuentes correctos). En caso de error se deberá implementar la estrategia de manejo de
 errores Panic Mode con sincronización y continuar el análisis.
 
-##Analisis
+## Analisis
 Json -> element eof
 element -> object | array
 array -> [element-list] | []
@@ -19,7 +19,7 @@ atribute -> atribute-name : atribute-value
 atribute-name -> string
 atribute-value -> element | string | number | true | false | null
 
-###Primero
+### Primero
 json = {P(element)} = {{;[}
 element = {P(object);P(array)}={{;[}
 array = {[}
